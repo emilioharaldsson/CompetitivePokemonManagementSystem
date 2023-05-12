@@ -27,5 +27,4 @@ public class Type {
     @JsonIgnore
     private Set<PokemonType> pokemonTypes = new HashSet<>();
 
-
 }
