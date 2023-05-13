@@ -42,4 +42,8 @@ public class Pokemon {
     @OneToMany(mappedBy="pokemon", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<PokemonType> pokemonTypes = new HashSet<>();
+
+    @OneToMany(mappedBy = "pokemon", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<PokemonMove> pokemonMoves = new HashSet<>();
 }

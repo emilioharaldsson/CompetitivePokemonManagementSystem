@@ -1,9 +1,11 @@
 package com.emilio.expenseapp.controller;
 
+import com.emilio.expenseapp.dao.MoveDAO;
 import com.emilio.expenseapp.dao.PokemonDAO;
 import com.emilio.expenseapp.dao.UserDAO;
 import com.emilio.expenseapp.dto.PokemonDTO;
 import com.emilio.expenseapp.dto.PokemonTypeDTO;
+import com.emilio.expenseapp.model.Move;
 import com.emilio.expenseapp.model.Pokemon;
 import com.emilio.expenseapp.model.User;
 import org.apache.coyote.Response;
@@ -28,6 +30,9 @@ public class IndexController {
 
     @Autowired
     private UserDAO userDAO;
+
+    @Autowired
+    private MoveDAO moveDAO;
 
     @GetMapping("/api/users/all")
     public List<User> getUsers() {
@@ -78,5 +83,10 @@ public class IndexController {
             pokemons.add(new PokemonTypeDTO(id, name, attack, defense, spattack, spdefense, speed, hp, types));
         }
         return ResponseEntity.ok(pokemons);
+    }
+
+    @GetMapping("/api/move/all")
+    public List<Move> getAllMoves(){
+        return moveDAO.getAllMoves();
     }
 }
