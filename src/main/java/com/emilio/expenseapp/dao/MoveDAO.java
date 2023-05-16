@@ -9,4 +9,7 @@ import java.util.List;
 public interface MoveDAO extends JpaRepository<Move, Long> {
     @Query("SELECT m FROM Move m")
     public List<Move> getAllMoves();
+
+    @Query("SELECT m FROM Move m where m.name =:name")
+    public Move findMoveFromName(String name);
 }

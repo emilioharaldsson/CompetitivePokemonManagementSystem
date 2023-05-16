@@ -1,10 +1,12 @@
 package com.emilio.expenseapp.service;
 
+import com.emilio.expenseapp.dao.MoveDAO;
 import com.emilio.expenseapp.dao.PokemonDAO;
+import com.emilio.expenseapp.dao.PokemonMoveDAO;
 import com.emilio.expenseapp.dao.TypeDAO;
-import com.emilio.expenseapp.model.Pokemon;
-import com.emilio.expenseapp.model.PokemonType;
-import com.emilio.expenseapp.model.Type;
+import com.emilio.expenseapp.dto.PokemonMoveDTO;
+import com.emilio.expenseapp.model.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,12 @@ import java.util.List;
 public class PokemonService {
     @Autowired
     private PokemonDAO pokemonDAO;
-
+    @Autowired
+    private MoveDAO moveDAO;
     @Autowired
     private TypeDAO typeDAO;
+    @Autowired
+    private PokemonMoveDAO pokemonMoveDAO;
     public Pokemon registerPokemonType(Integer pokemonId, Integer typeId){
         Pokemon pokemon = pokemonDAO.findPokemonById(pokemonId);
         Type type = typeDAO.findTypeById(typeId);
@@ -39,6 +44,20 @@ public class PokemonService {
         
     }
 
-
+    @Transactional
+    public void registerPokemonMove(List<PokemonMoveDTO> pokemonMoveList){
+        for (PokemonMoveDTO pokemonMoveDTO : pokemonMoveList){
+            Move move = moveDAO.findMoveFromName(pokemonMoveDTO.getName());
+            for (String pokemonName : pokemonMoveDTO.getPokemon()){
+                Pokemon pokemon = pokemonDAO.findPokemonByName(pokemonName);
+                if (pokemon != null){
+                    PokemonMove pokemonMove = new PokemonMove();
+                    pokemonMove.setPokemon(pokemon);
+                    pokemonMove.setMove(move);
+                    pokemonMoveDAO.save(pokemonMove);
+                }
+            }
+        }
+    }
 
 }

@@ -15,6 +15,9 @@ public interface PokemonDAO extends JpaRepository<Pokemon, Long> {
     @Query("SELECT p FROM Pokemon p where p.id = :id")
     public Pokemon findPokemonById(Integer id);
 
+    @Query("SELECT p FROM Pokemon p where p.name = :name")
+    public Pokemon findPokemonByName(String name);
+
     @Query(value = "SELECT p.id, p.name, p.atk, p.def, p.spatk, p.spdef, p.spd, p.hp, GROUP_CONCAT(t.name) as types " +
             "FROM pokemon p " +
             "JOIN pokemon_type pt ON p.id = pt.pokemon_id " +
