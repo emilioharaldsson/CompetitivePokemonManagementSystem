@@ -47,10 +47,10 @@ public class PokemonService {
     @Transactional
     public void registerPokemonMove(List<PokemonMoveDTO> pokemonMoveList){
         for (PokemonMoveDTO pokemonMoveDTO : pokemonMoveList){
-            Move move = moveDAO.findMoveFromName(pokemonMoveDTO.getName());
-            for (String pokemonName : pokemonMoveDTO.getPokemon()){
-                Pokemon pokemon = pokemonDAO.findPokemonByName(pokemonName);
-                if (pokemon != null){
+            Pokemon pokemon = pokemonDAO.findPokemonByName(pokemonMoveDTO.getPokemonName());
+            for (String moveName : pokemonMoveDTO.getMoves()){
+                Move move = moveDAO.findMoveFromName(moveName);
+                if (move != null) {
                     PokemonMove pokemonMove = new PokemonMove();
                     pokemonMove.setPokemon(pokemon);
                     pokemonMove.setMove(move);
@@ -59,5 +59,4 @@ public class PokemonService {
             }
         }
     }
-
 }

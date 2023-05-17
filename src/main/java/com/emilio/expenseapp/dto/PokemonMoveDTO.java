@@ -12,6 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 public class PokemonMoveDTO {
-    private String name;
-    private List<String> pokemon;
+    private String pokemonName;
+    private List<String> moves;
 }
