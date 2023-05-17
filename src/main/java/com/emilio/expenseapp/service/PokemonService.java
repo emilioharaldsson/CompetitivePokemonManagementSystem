@@ -55,6 +55,7 @@ public class PokemonService {
                     pokemonMove.setPokemon(pokemon);
                     pokemonMove.setMove(move);
                     pokemonMoveDAO.save(pokemonMove);
+                    System.out.println(pokemonMove);
                 }
             }
         }
