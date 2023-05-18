@@ -32,4 +32,7 @@ public interface PokemonDAO extends JpaRepository<Pokemon, Long> {
             "JOIN type t ON pt.type_id = t.id " +
             "WHERE p.id = :id", nativeQuery = true)
     List<Object[]> findPokemonWithTypeRaw(Integer id);
+
+    @Query(value="", nativeQuery = true)
+    List<Object[]> findPokemonWithMoveAndTypeRaw(Integer id);
 }

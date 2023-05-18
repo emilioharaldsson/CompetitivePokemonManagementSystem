@@ -5,8 +5,10 @@ import com.emilio.expenseapp.dao.PokemonDAO;
 import com.emilio.expenseapp.dao.UserDAO;
 import com.emilio.expenseapp.dto.PokemonDTO;
 import com.emilio.expenseapp.dto.PokemonTypeDTO;
+import com.emilio.expenseapp.dto.PokemonTypeMoveDTO;
 import com.emilio.expenseapp.model.Move;
 import com.emilio.expenseapp.model.Pokemon;
+import com.emilio.expenseapp.model.PokemonType;
 import com.emilio.expenseapp.model.User;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,5 +90,13 @@ public class IndexController {
     @GetMapping("/api/move/all")
     public List<Move> getAllMoves(){
         return moveDAO.getAllMoves();
+    }
+
+
+    @GetMapping("/api/pm/{pokemonId}")
+    public ResponseEntity<PokemonTypeMoveDTO> getPokemonTypeMove(@PathVariable Integer pokemonId){
+        PokemonTypeMoveDTO pokemonMoveTypeDTO = new PokemonTypeMoveDTO();
+
+        return ResponseEntity.ok(pokemonMoveTypeDTO);
     }
 }

@@ -11,7 +11,15 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PokemonMoveDTO {
+public class PokemonTypeMoveDTO {
+    private Integer id;
     private String name;
+    private int attack;
+    private int defense;
+    private int spattack;
+    private int spdefense;
+    private int speed;
+    private int hp;
+    private List<String> types;
     private List<String> moves;
 }
