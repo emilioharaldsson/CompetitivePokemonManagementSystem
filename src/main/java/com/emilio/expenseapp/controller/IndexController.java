@@ -95,7 +95,24 @@ public class IndexController {
 
     @GetMapping("/api/pm/{pokemonId}")
     public ResponseEntity<PokemonTypeMoveDTO> getPokemonTypeMove(@PathVariable Integer pokemonId){
-        PokemonTypeMoveDTO pokemonMoveTypeDTO = new PokemonTypeMoveDTO();
+        List<Object[]> rawPokemonList = pokemonDAO.findPokemonWithMoveAndTypeRaw(pokemonId);
+        if (rawPokemonList.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        Object[] rawPokemon = rawPokemonList.get(0);
+
+        PokemonTypeMoveDTO pokemonMoveTypeDTO = new PokemonTypeMoveDTO(
+                ((Number) rawPokemon[0]).intValue(),
+                (String) rawPokemon[1],
+                ((Number) rawPokemon[2]).intValue(),
+                ((Number) rawPokemon[3]).intValue(),
+                ((Number) rawPokemon[4]).intValue(),
+                ((Number) rawPokemon[5]).intValue(),
+                ((Number) rawPokemon[6]).intValue(),
+                ((Number) rawPokemon[7]).intValue(),
+                Arrays.asList(((String) rawPokemon[8]).split(",")),
+                Arrays.asList(((String) rawPokemon[9]).split(","))
+        );
 
         return ResponseEntity.ok(pokemonMoveTypeDTO);
     }

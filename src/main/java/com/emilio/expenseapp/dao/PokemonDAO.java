@@ -33,6 +33,9 @@ public interface PokemonDAO extends JpaRepository<Pokemon, Long> {
             "WHERE p.id = :id", nativeQuery = true)
     List<Object[]> findPokemonWithTypeRaw(Integer id);
 
-    @Query(value="", nativeQuery = true)
+    @Query(value = "SELECT p.id, p.name, p.atk, p.def, p.spatk, p.spdef, p.spd, p.hp, " +
+            "(SELECT GROUP_CONCAT(t.name) FROM pokemon_type pt JOIN type t ON pt.type_id = t.id WHERE pt.pokemon_id = p.id) as types, " +
+            "(SELECT GROUP_CONCAT(m.name) FROM pokemon_move pm JOIN move m ON pm.move_id = m.id WHERE pm.pokemon_id = p.id) as moves " +
+            "FROM pokemon p WHERE p.id = ?1", nativeQuery = true)
     List<Object[]> findPokemonWithMoveAndTypeRaw(Integer id);
 }
