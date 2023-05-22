@@ -1,15 +1,11 @@
 package com.emilio.expenseapp.controller;
 
-import com.emilio.expenseapp.dao.MoveDAO;
-import com.emilio.expenseapp.dao.PokemonDAO;
-import com.emilio.expenseapp.dao.TeamDAO;
-import com.emilio.expenseapp.dao.UserDAO;
+import com.emilio.expenseapp.dao.*;
 import com.emilio.expenseapp.dto.TeamDTO;
 import com.emilio.expenseapp.dto.TeamPokemonDTO;
-import com.emilio.expenseapp.model.Pokemon;
-import com.emilio.expenseapp.model.Team;
-import com.emilio.expenseapp.model.TeamPokemon;
-import com.emilio.expenseapp.model.User;
+import com.emilio.expenseapp.exception.BadRequestException;
+import com.emilio.expenseapp.exception.ResourceNotFoundException;
+import com.emilio.expenseapp.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +21,8 @@ public class TeamController {
     private MoveDAO moveDAO;
     @Autowired
     private TeamDAO teamDAO;
+    @Autowired
+    private PokemonMoveDAO pokemonMoveDAO;
     @PostMapping("/add/{userId}")
     public ResponseEntity<?> registerNewUserTeam(@PathVariable Integer userId, @RequestBody TeamDTO teamRequestBody){
         User user = userDAO.findUserById(userId);
@@ -37,13 +35,40 @@ public class TeamController {
             TeamPokemon teamPokemon = new TeamPokemon();
             teamPokemon.setTeam(newTeam);
             teamPokemon.setPokemon(pokemon);
-            teamPokemon.setMove1(moveDAO.findById(teamPokemonDTO.getMove1Id()));
-            teamPokemon.setMove2(moveDAO.findById(teamPokemonDTO.getMove2Id()));
-            teamPokemon.setMove3(moveDAO.findById(teamPokemonDTO.getMove3Id()));
-            teamPokemon.setMove4(moveDAO.findById(teamPokemonDTO.getMove4Id()));
+            assignMoveIfPokemonCanLearn(teamPokemonDTO.getMove1Id(), pokemon, teamPokemon, 1);
+            assignMoveIfPokemonCanLearn(teamPokemonDTO.getMove2Id(), pokemon, teamPokemon, 2);
+            assignMoveIfPokemonCanLearn(teamPokemonDTO.getMove3Id(), pokemon, teamPokemon, 3);
+            assignMoveIfPokemonCanLearn(teamPokemonDTO.getMove4Id(), pokemon, teamPokemon, 4);
             newTeam.getTeamPokemons().add(teamPokemon);
         }
         teamDAO.save(newTeam);
         return ResponseEntity.ok().body("Success");
+    }
+
+    private void assignMoveIfPokemonCanLearn(Integer moveId, Pokemon pokemon, TeamPokemon teamPokemon, int moveNumber){
+        if (moveId != null){
+            Move move = moveDAO.findById(moveId);
+            if (move == null){
+                throw new ResourceNotFoundException("Move", "id", moveId);
+            }
+            boolean canLearn = pokemonMoveDAO.existByPokemonAndMove(pokemon, move);
+            if (!canLearn){
+                throw new BadRequestException("Pokemon with id " + pokemon.getId() + " can't learn move with id " + moveId);
+            }
+            switch(moveNumber){
+                case 1:
+                    teamPokemon.setMove1(move);
+                    break;
+                case 2:
+                    teamPokemon.setMove2(move);
+                    break;
+                case 3:
+                    teamPokemon.setMove3(move);
+                    break;
+                case 4:
+                    teamPokemon.setMove4(move);
+                    break;
+            }
+        }
     }
 }
