@@ -30,4 +30,8 @@ public class User {
     @JsonIgnore
     private Set<UserPokemon> userPokemons = new HashSet<>();
 
+    @OneToMany(mappedBy="user", cascade=CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Team> teams = new HashSet<>();
+
 }

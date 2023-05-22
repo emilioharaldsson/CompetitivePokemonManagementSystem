@@ -12,4 +12,7 @@ public interface MoveDAO extends JpaRepository<Move, Long> {
 
     @Query("SELECT m FROM Move m where m.name =:name")
     public Move findMoveFromName(String name);
+
+    @Query("SELECT m FROM Move m where m.id=:id")
+    public Move findById(Integer id);
 }
