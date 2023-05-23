@@ -51,7 +51,7 @@ public class TeamController {
             if (move == null){
                 throw new ResourceNotFoundException("Move", "id", moveId);
             }
-            boolean canLearn = pokemonMoveDAO.existByPokemonAndMove(pokemon, move);
+            boolean canLearn = pokemonMoveDAO.existsByPokemonAndMove(pokemon, move);
             if (!canLearn){
                 throw new BadRequestException("Pokemon with id " + pokemon.getId() + " can't learn move with id " + moveId);
             }

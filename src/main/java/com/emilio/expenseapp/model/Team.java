@@ -3,6 +3,7 @@ package com.emilio.expenseapp.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -20,7 +21,7 @@ public class Team {
     @ManyToOne
     private User user;
     @OneToMany(mappedBy = "team")
-    private Set<TeamPokemon> teamPokemons;
+    private Set<TeamPokemon> teamPokemons = new HashSet<>();
     @Column(name="name")
     private String name;
 }
